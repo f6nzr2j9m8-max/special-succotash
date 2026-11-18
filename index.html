@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>百数抽号器</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:#111;color:#fff;padding:16px;font-family:system-ui}
+.title{text-align:center;font-size:22px;margin-bottom:12px}
+.ctrl{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+button{padding:8px 14px;border:none;border-radius:6px;background:#2563eb;color:#fff;font-size:15px;cursor:pointer}
+button:hover{filter:brightness(1.1)}
+#reset{background:#dc2626}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;max-width:520px;margin:0 auto}
+.item{aspect-ratio:1;background:#222;border-radius:6px;display:grid;place-items:center;font-size:18px}
+.item.used{background:#333;color:#666}
+@media (max-width:420px){.grid{gap:4px}.item{font-size:14px}button{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="title">百数抽号 1–100</div>
+<div class="ctrl">
+<button id="draw">随机抽一个</button>
+<button id="reset">全部重置</button>
+</div>
+<div class="grid" id="box"></div>
+<script>
+const max=100
+let pool=Array.from({length:max},(_,i)=>i+1)
+const wrap=document.getElementById('box')
+function render(){
+  wrap.innerHTML=''
+  for(let i=1;i<=max;i++){
+    const d=document.createElement('div')
+    d.className='item'
+    d.textContent=i
+    if(!pool.includes(i)) d.classList.add('used')
+    wrap.appendChild(d)
+  }
+}
+document.getElementById('draw').onclick=()=>{
+  if(pool.length===0)return alert('已经抽完啦')
+  const r=Math.floor(Math.random()*pool.length)
+  const num=pool.splice(r,1)[0]
+  alert(`抽到：${num}`)
+  render()
+}
+document.getElementById('reset').onclick=()=>{
+  pool=Array.from({length:max},(_,i)=>i+1)
+  render()
+}
+render()
+</script>
+</body>
+</html>
